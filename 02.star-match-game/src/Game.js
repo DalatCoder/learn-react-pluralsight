@@ -1,26 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PlayNumber from './PlayNumber';
 import StarsDisplay from './StarsDisplay';
 import PlayAgain from './PlayAgain';
+import useGameState from './useGameState'
 
 import utils from './utils';
 
-const Game = (props) => {
-  const [stars, setStars] = useState(utils.random(1, 9));
-  const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
-  const [candidateNums, setCandidateNums] = useState([]);
-  const [secondsLeft, setSecondsLeft] = useState(10);
-  // Side effect
-  useEffect(() => {
-    if (secondsLeft > 0 && availableNums.length > 0) {
-      const timerId = setTimeout(() => {
-        setSecondsLeft(secondsLeft - 1);
-      }, 1000);
+const Game = props => {
 
-      // Clear side effect when component unmount
-      return () => clearTimeout(timerId);
-    }
-  });
+  const {
+    candidateNums,
+    availableNums,
+    stars,
+    secondsLeft,
+    setGameState,
+  } = useGameState()
 
   const candiateAreWrong = utils.sum(candidateNums) > stars;
   const gameStatus =
@@ -49,17 +43,7 @@ const Game = (props) => {
         ? candidateNums.concat(number)
         : candidateNums.filter(cn => cn !== number);
 
-    if (utils.sum(newCandidateNums) !== stars) {
-      setCandidateNums(newCandidateNums);
-    } else {
-      const newAvailableNums = availableNums.filter(
-        n => !newCandidateNums.includes(n)
-      );
-
-      setStars(utils.randomSumIn(newAvailableNums, 9));
-      setAvailableNums(newAvailableNums);
-      setCandidateNums([]);
-    }
+    setGameState(newCandidateNums)
   };
 
   return (
