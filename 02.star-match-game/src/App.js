@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PlayNumber from './PlayNumber';
 import StarsDisplay from './StarsDisplay';
+import PlayAgain from './PlayAgain';
 
 import utils from './utils';
 
@@ -8,8 +9,16 @@ const App = () => {
   const [stars, setStars] = useState(utils.random(1, 9));
   const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
   const [candidateNums, setCandidateNums] = useState([]);
+  const [secondsLeft, setSecondsLeft] = useState(10);
 
   const candiateAreWrong = utils.sum(candidateNums) > stars;
+  const gameIsDone = availableNums.length === 0;
+
+  const resetGame = () => {
+    setStars(utils.random(1, 9));
+    setAvailableNums(utils.range(1, 9));
+    setCandidateNums([]);
+  };
 
   const getNumberStatus = number => {
     // Check if number is used
@@ -25,7 +34,6 @@ const App = () => {
   };
 
   const onNumberClick = (number, status) => {
-    console.log(number, status);
     if (status === 'used') {
       return;
     }
@@ -55,7 +63,11 @@ const App = () => {
       </div>
       <div className="body">
         <div className="left">
-          <StarsDisplay count={stars} />
+          {gameIsDone ? (
+            <PlayAgain onClick={resetGame} />
+          ) : (
+            <StarsDisplay count={stars} />
+          )}
         </div>
         <div className="right">
           {utils.range(1, 9).map(number => (
@@ -68,7 +80,7 @@ const App = () => {
           ))}
         </div>
       </div>
-      <div className="timer">Time Remaining: 10</div>
+      <div className="timer">Time Remaining: {secondsLeft}</div>
     </div>
   );
 };
