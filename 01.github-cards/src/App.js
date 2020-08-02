@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import CardList from './CardList';
 import Form from './Form';
 
@@ -9,7 +10,7 @@ class App extends React.Component {
 
   addNewProfile = profile => {
     this.setState({
-      profiles: [...this.state.profiles, profile]
+      profiles: _.concat(this.state.profiles, profile)
     });
   };
 
