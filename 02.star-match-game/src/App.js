@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
-import utils from './utils';
 import PlayNumber from './PlayNumber';
 import StarsDisplay from './StarsDisplay';
 
+import utils from './utils';
+
 const App = () => {
   const [stars, setStars] = useState(utils.random(1, 9));
+  const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
+  const [candidateNums, setCandidateNums] = useState([]);
+
+  const candiateAreWrong = utils.sum(candidateNums) > stars;
+
+  const getNumberStatus = number => {
+    // Check if number is used
+    if (!availableNums.includes(number)) {
+      return 'used';
+    }
+
+    if (candidateNums.includes(number)) {
+      return candiateAreWrong ? 'wrong' : 'candidate';
+    }
+
+    return 'avaiable';
+  };
 
   return (
     <div className="game">
@@ -17,7 +35,11 @@ const App = () => {
         </div>
         <div className="right">
           {utils.range(1, 9).map(number => (
-            <PlayNumber key={number} number={number} />
+            <PlayNumber
+              key={number}
+              number={number}
+              status={getNumberStatus(number)}
+            />
           ))}
         </div>
       </div>
