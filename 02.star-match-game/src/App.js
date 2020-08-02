@@ -21,7 +21,31 @@ const App = () => {
       return candiateAreWrong ? 'wrong' : 'candidate';
     }
 
-    return 'avaiable';
+    return 'available';
+  };
+
+  const onNumberClick = (number, status) => {
+    console.log(number, status);
+    if (status === 'used') {
+      return;
+    }
+
+    const newCandidateNums =
+      status === 'available'
+        ? candidateNums.concat(number)
+        : candidateNums.filter(cn => cn !== number);
+
+    if (utils.sum(newCandidateNums) !== stars) {
+      setCandidateNums(newCandidateNums);
+    } else {
+      const newAvailableNums = availableNums.filter(
+        n => !newCandidateNums.includes(n)
+      );
+
+      setStars(utils.randomSumIn(newAvailableNums, 9));
+      setAvailableNums(newAvailableNums);
+      setCandidateNums([]);
+    }
   };
 
   return (
@@ -39,6 +63,7 @@ const App = () => {
               key={number}
               number={number}
               status={getNumberStatus(number)}
+              onClick={onNumberClick}
             />
           ))}
         </div>
