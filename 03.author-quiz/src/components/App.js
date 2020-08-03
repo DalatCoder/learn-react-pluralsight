@@ -20,9 +20,22 @@ const Book = ({ title }) => {
   );
 };
 
-const Turn = ({ author, books }) => {
+const Turn = ({ author, books, highlight }) => {
+  function highlightToBgColor(highlight) {
+    const mappings = {
+      none: '',
+      correct: 'green',
+      wrong: 'red'
+    };
+
+    return mappings[highlight];
+  }
+
   return (
-    <div className="row turn" style={{ backgroundColor: 'white' }}>
+    <div
+      className="row turn"
+      style={{ backgroundColor: highlightToBgColor(highlight) }}
+    >
       <div className="col-4 offset-1">
         <img src={author.imageUrl} className="authorimage" alt="Author" />
       </div>
@@ -50,11 +63,11 @@ const Footer = () => {
   );
 };
 
-const App = ({ turnData }) => {
+const App = ({ turnData, highlight }) => {
   return (
     <div className="container-fluid">
       <Hero />
-      <Turn {...turnData} />
+      <Turn {...turnData} highlight={highlight} />
       <Continue />
       <Footer />
     </div>

@@ -20,7 +20,8 @@ function getTurnData(authors) {
 }
 
 const state = {
-  turnData: getTurnData(authors)
+  turnData: getTurnData(authors),
+  highlight: 'wrong'
 };
 
 ReactDOM.render(<App {...state} />, document.getElementById('root'));
