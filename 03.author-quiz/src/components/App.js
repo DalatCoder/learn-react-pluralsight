@@ -12,15 +12,15 @@ const Hero = () => {
   );
 };
 
-const Book = ({ title }) => {
+const Book = ({ title, onClick }) => {
   return (
-    <div className="answer">
+    <div className="answer" onClick={() => onClick(title)}>
       <h4>{title}</h4>
     </div>
   );
 };
 
-const Turn = ({ author, books, highlight }) => {
+const Turn = ({ author, books, highlight, onAnswerSelected }) => {
   function highlightToBgColor(highlight) {
     const mappings = {
       none: '',
@@ -42,7 +42,7 @@ const Turn = ({ author, books, highlight }) => {
 
       <div className="col-6">
         {books.map(title => (
-          <Book title={title} key={title} />
+          <Book title={title} key={title} onClick={onAnswerSelected} />
         ))}
       </div>
     </div>
@@ -63,11 +63,15 @@ const Footer = () => {
   );
 };
 
-const App = ({ turnData, highlight }) => {
+const App = ({ turnData, highlight, onAnswerSelected }) => {
   return (
     <div className="container-fluid">
       <Hero />
-      <Turn {...turnData} highlight={highlight} />
+      <Turn
+        {...turnData}
+        highlight={highlight}
+        onAnswerSelected={onAnswerSelected}
+      />
       <Continue />
       <Footer />
     </div>
